@@ -1,0 +1,178 @@
+<aura:component controller="AccountComponentController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="accounts" type="List" />
+    <aura:attribute name="contNew" type="Contact" />
+    <aura:attribute name="isDisplay" type="Boolean" default="false"/>
+    <aura:attribute name="showSuccessMessage" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="searchKeyword" type="String" description="use for store user search input"/>
+    <aura:attribute name="accountId" type="String" description="use for store account Id"/>
+    <aura:attribute name="message" type="String" description="use to show message"/>
+    <aura:attribute name="accountName" type="string"/>
+    <aura:attribute name="typeList" type="List" />
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="simpleRecord" type="Object" />
+  	<aura:attribute name="showAccountEditModal" type="Boolean" default="false"/>
+    <div class="slds-m-around_small" style="margin-bottom:0px!important;">
+       <!-- SEARCH INPUT--> 
+        <div class="slds-grid slds-grid_reverse">
+            <div class="slds-float_right">
+                <aura:if isTrue="{!v.isDisplay}"> 
+                        <lightning:button class="slds-button slds-button_success" label="New Contact" onclick="{!c.editAccount}"/>
+                        <lightning:button class="slds-button slds-button_success" label="New Opportunity" />
+                        <lightning:button class="slds-button slds-button_success" label="New Invoice" />
+                </aura:if>
+            </div>           
+            <div class="slds-col">
+               <lightning:layout>
+                    <lightning:layoutItem size="3" padding="around-small">
+                        <lightning:input value="{!v.searchKeyword}"
+                                         placeholder="search Accounts.."
+                                         aura:id="searchField"
+                                         label="Search by Account Name"
+                                         onchange="{!c.searchAccounts}" />
+                   </lightning:layoutItem>   
+                </lightning:layout>
+            </div>
+        </div>
+    </div> 
+   
+   
+    <!-- Use a data table from the Lightning Design System: https://www.lightningdesignsystem.com/components/data-tables/ -->
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout ">
+         <aura:if isTrue="{!empty(v.accounts)}">
+                <div class="slds-text-heading_small slds-text-align_center" style="margin-bottom:20px;margin-top:20px;">No records found.</div> 
+            </aura:if>
+          <aura:if isTrue="{!not(empty(v.accounts))}">
+        <thead>
+            <tr class="slds-text-heading_label">
+                <th scope="col" style="width:3.25rem;" class="slds-text-align--right">
+                    <div class="slds-truncate" title="Name"></div>
+                </th>
+                <th><div class="slds-truncate" title="Name">Name</div></th>
+                <th scope="col" style="width:160px;"><div class="slds-truncate" title="Type">Type</div></th>
+                <th scope="col" style="width:120px;"><div class="slds-truncate" title="Employees">Employees</div></th>
+                <th scope="col" style="width:200px;"><div class="slds-truncate" title="Website">Website</div></th>
+                <th scope="col" style="width:120px;"><div class="slds-truncate" title="Billing City">Billing City</div></th>
+                <th scope="col" style="width:160px;"><div class="slds-truncate" title="Phone">Phone</div></th>
+                <th scope="col"><div class="slds-truncate slds-text-align_center" title="Actions">Actions</div></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Use the Apex model and controller to fetch server side data -->            
+          
+            <aura:iteration items="{!v.accounts}" var="account">
+                <tr>
+                    <th scope="row"><div class="slds-truncate">
+                        <div class="slds-form-element__control">
+                            <label class="slds-checkbox">
+                                 <ui:inputRadio text="{!account.Id}" aura:id="r0" name="others" change="{!c.checkboxSelect}"/>
+                            </label>
+                        </div>
+                        </div>
+                    </th>
+                    <td><div class="slds-truncate" title="{!account.Name}">{!account.Name}</div></td>
+                    <td><div class="slds-truncate" title="{!account.Type}">{!account.Type}</div></td>
+                    <td><div class="slds-truncate" title="{!account.NumberOfEmployees}">{!account.NumberOfEmployees}</div></td>
+                    <td><div class="slds-truncate" title="{!account.Website}">{!account.Website}</div></td>
+                    <td><div class="slds-truncate" title="{!account.Website}">{!account.BillingCity}</div></td>
+                    <td><div class="slds-truncate" title="{!account.Phone}">{!account.Phone}</div></td>
+                    <td>
+                        <form class="account-form">
+                            
+                            <!-- Use a Lightning Base Component To display an icon next to the label -->
+                            <lightning:button 
+                                              label="Edit"
+                                              iconName="utility:edit"
+                                              iconPosition="left" 
+                                              onclick="{!c.editAccount}"  
+                                              value="{!account.Id}"
+                                              /> 
+                            <lightning:button
+                                              aura:id="acctView"
+                                              label="View"
+                                              iconName="utility:preview"
+                                              iconPosition="left"
+											  onclick="{!c.accountView}"  
+                                              value="{!account.Id}"
+                                              />
+                            <lightning:button
+                                              label="Delete"
+                                              iconName="utility:delete"
+                                              iconPosition="left"      
+                                              onclick="{!c.deleteAccounts}"  
+                                              value="{!account.Id}"
+                                              />                           
+                        </form>
+                    </td>
+                </tr>
+            </aura:iteration>           
+        </tbody>
+               </aura:if>
+    </table>
+    <!--Edit Modal Starts-->
+    <aura:if isTrue="{!v.showAccountEditModal}">
+        <div>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">        
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Account Edit</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">            
+                        <force:recordData aura:id="recordEditor"
+                                          layoutType="FULL"
+                                          recordId="{!v.accountId}"                             
+                                          targetRecord="{!v.record}"
+                                          targetFields ="{!v.simpleRecord}"
+                                          mode="EDIT" />
+                        <!-- Display an editing form -->
+                        <lightning:card iconName="action:edit" title="Edit Account">
+                            <div class="slds-p-horizontal--small">
+                                <lightning:input label="Account Name" value="{!v.simpleRecord.Name}"/>
+                                <br/>
+                                <lightning:select label="Type" value="{!v.simpleRecord.Type}" >
+                                    <aura:iteration items="{!v.typeList}" var="type">
+                                    <option value="{!type}">{!type}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                <br/>
+                                <lightning:input label="Number of Employees" value="{!v.simpleRecord.NumberOfEmployees}"/>
+                                <br/>
+                                <lightning:input label="Website" value="{!v.simpleRecord.Website}"/>
+                                <br/>
+                                <lightning:input label="Billing City" value="{!v.simpleRecord.BillingCity}"/>
+                                <br/>
+                                <lightning:input label="Phone" value="{!v.simpleRecord.Phone}"/>          
+                            </div>
+                        </lightning:card>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <center>
+                            <lightning:button class="slds-button slds-button_success" label="Save" onclick="{!c.updateAccount}" type="submit"/>
+                            <lightning:button class="slds-button slds-button_destructive" label="Cancel" onclick="{!c.closeModal}" />
+                        </center>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    <!--Show updated Message-->
+    <aura:if isTrue="{!v.showSuccessMessage}">       
+        <div class="slds-notify_container">
+            <div class="slds-notify slds-notify--toast slds-theme--success slds-text-align_center" role="alert"> 
+                <div class="slds-notify__content slds-grid">      
+                    <div class="slds-col slds-align-middle">
+                        <span class="slds-text-heading--small ">{!v.message}</span>                         
+                    </div>
+                     <div class="slds-col slds-align-right">
+                    <lightning:button
+                                  iconName="utility:close"
+                                  onclick="{!c.closeModal}"
+                                  class="slds-button"
+                                  />  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

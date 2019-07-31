@@ -1,0 +1,29 @@
+<!--
+  @Component Name     : dataTable.html
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 30/7/2019, 1:27:16 PM
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    29/7/2019, 11:01:14 AM   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<template>
+    <lightning-card title="Datatable Example" icon-name="custom:custom63">
+
+        <div class="slds-m-around_medium">
+            <template if:true={data}>
+                <lightning-datatable key-field="Id" data={data} columns={columns} onsave={handleSave}
+                    draft-values={draftValues} onrowselection={getSelectedName} sorted-by={sortBy}
+                    sorted-direction={sortDirection} onsort={handleSortdata} hide-checkbox-column="true">
+                </lightning-datatable>
+            </template>
+            <template if:true={error}>
+                <!-- handle Apex error -->
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,14 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<div class="slds-page-header">
+    <div class="slds-align_absolute-center">
+        <div class="slds-text-heading_large">
+            <div class="slds-m-top_xx-large">
+                <center> DueDil Authentication</center>
+                <lightning:input name="input1" />
+                <center><lightning:button variant="success" label="Success" title="Success" /></center>
+            </div>
+            
+        </div>
+    </div>
+</div>
+</aura:component>

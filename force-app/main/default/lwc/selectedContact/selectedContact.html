@@ -1,0 +1,30 @@
+<!--
+  @Component Name     : viewTreeSelected.html
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 26/7/2019, 7:00:06 PM
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    26/7/2019, 2:17:17 PM   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<template>
+  <div style="text-align: right">
+    <lightning-button-group>
+      <lightning-button variant="brand" label="View" title="Brand action" onclick={handleView}
+        class="slds-m-left_x-small"></lightning-button>
+      <lightning-button variant="brand" label="Delete" title="Brand action" onclick={handleClick}
+        class="slds-m-left_x-small"></lightning-button>
+      <lightning-button variant="brand" label="Create New Contact" title="Brand action" onclick={handleClick}
+        class="slds-m-left_x-small"></lightning-button>
+    </lightning-button-group>
+  </div>
+  <div>
+    <lightning-record-form record-id={recordid} object-api-name="Contact" layout-type="Compact" columns="1" mode="edit">
+    </lightning-record-form>
+  </div>
+
+</template>

@@ -1,0 +1,45 @@
+<!--
+  @Component Name     : methodText.html
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 26/7/2019, 3:14:09 PM
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    26/7/2019, 12:11:47 PM   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<template>
+    <lightning-card title="MiscGetUserId" icon-name="custom:custom19">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+
+                <div class="slds-m-around_medium">
+                    <p>User Name:</p>
+                    {userName}
+                </div>
+
+                <template if:true={items.data}>
+                    <div class="slds-m-top_medium slds-m-bottom_x-large">
+                        <!-- Simple -->
+
+                        <div class="slds-p-around_medium lgc-bg">
+                            <lightning-tree items={items.data} header="Hierarchy" onselect={handleclick}>
+                            </lightning-tree>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+            <div class="slds-col">
+                <template if:true={vale}>
+                    <c-selected-contact recordid={vale}></c-selected-contact>
+                </template>
+
+            </div>
+        </div>
+    </lightning-card>
+
+</template>

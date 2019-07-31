@@ -1,0 +1,26 @@
+<aura:component controller="EmailValidatorController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="emailStr" type="String" />
+    <aura:attribute name="isValid" type="Boolean"/>
+    <aura:attribute name="isInvalid" type="Boolean" />
+    <div class="slds-grid" height="300px" width="50%">
+        <div class="slds-col">
+            <lightning:input type="text" label="Enter a Email to verify" name="input1" value="{!v.emailStr}" /> <br/>
+            <lightning:button variant="success" label="Success" title="Success" onclick="{! c.handleClick }"/>
+            <lightning:button variant="brand" label="Reset" title="Brand action" onclick="{! c.reset }" />
+        </div>
+    </div>
+        <div class="slds-col" style="margin-top:2%">
+            <aura:if isTrue="{!v.isValid}"> 
+                <div class="slds-col">
+                    <div class="slds-text-body_regular">Its a valid email.</div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.isInvalid}"> 
+                <div class="slds-col">
+                    <div class="slds-text-body_regular">Its a invalid email .</div>
+                </div>
+            </aura:if>
+        </div>
+  
+        
+</aura:component>

@@ -1,0 +1,111 @@
+<aura:component controller="AccountController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	
+    <aura:attribute name="data" type="Object"/>  
+    <aura:attribute name="SelectedAccount" type="Map" default="{}"/>
+    <aura:attribute name="selectedRowsCount" type="Integer" default="0"/>
+    <aura:attribute name="maxRowSelection" type="Integer" default="5"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="fields" type="String[]"/>
+    <aura:attribute name="allData" type="List"/>  
+	 <aura:attribute name="GenreList" type="List" default="[]" description="Genre Picklist Values"/>
+    <aura:attribute name="selectedGenreList" type="List" default="[]" description="Selected fields"/>
+    <aura:attribute name="displayDataTable" type="Boolean"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="showColumnCustomisationModal" type="Boolean" description="use to Column Customisation display modal"/>
+     <!-- Attribute Declration For Pagination -->
+    <aura:attribute name="PaginationList" type="account"/>
+    <aura:attribute name="currentPage" type="Integer" />
+    <aura:attribute name="startPage" type="Integer" />
+    <aura:attribute name="endPage" type="Integer"/>
+    <aura:attribute name="totalRecords" type="Integer"/>
+    <aura:attribute name="pageSize" type="Integer" default="15"/>
+    <!-- Attribute Declration For Pagination End-->
+    <!--Attribute Declaration for Object Start-->
+    <aura:attribute name="objectOptions" type="Map" />
+    <aura:attribute name="selectedValue" type="String" />
+    <!--Attribute Declaration for Object End-->
+    <!--Object Starts-->
+    <div class="slds-grid slds-gutters" align="center" width="50%" style="margin:5%">
+        <div class="slds-col">
+            <lightning:select name="colorId" label="Select a Object" value="{!v.selectedValue}" class="list" onchange="{!c.getDataTable}">
+                <aura:iteration items="{!v.objectOptions}" var="object" indexVar="key">
+                    <option text="{!object.key}" value="{!object.value}"/>
+                </aura:iteration>
+            </lightning:select>    
+        </div>
+    </div>
+    <!--Object Ends-->
+     <!--Edit Modal Starts-->
+    <aura:if isTrue="{!v.showColumnCustomisationModal}">
+        <div>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">        
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select fields to display</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">            
+                        <lightning:dualListbox aura:id="selectGenre"
+                                               name="Account Fields"
+                                               label="Select the fields to display table"
+                                               sourceLabel="Available Fields"
+                                               selectedLabel="Selected Fields"
+                                               options="{!v.GenreList }"
+                                               value="{!v.selectedGenreList}"
+                                               onchange="{!c.handleTableColumns}"/>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <center>
+                            <lightning:button variant="brand" label="Submit" onclick="{!c.onSubmit}" />
+                        </center>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>    
+     <!-- Data Table Starts -->
+     <aura:if isTrue="{!v.displayDataTable}">
+       <div class="slds-col" style="margin-top:2%">
+            <lightning:card title="Accounts">
+                <lightning:layout multipleRows="true" horizontalAlign="center">                    
+                    <lightning:layoutItem padding="around-small" size="12">
+                        <div style="text-align:right!important;">
+                            <lightning:button label="Customize Columns" iconName="utility:table" iconPosition="right" variant="brand" onclick="{!c.showColumnCustomizations}"/>
+                        </div>
+                        <div>
+                             <h1>Selected Rows: {! v.selectedRowsCount }</h1>
+                        </div>
+                        <lightning:datatable
+                                             aura:id="accountDataTable"
+                                             columns="{!v.columns }"
+                                             data="{!v.PaginationList }"
+                                             keyField="Id"
+                                             onrowselection="{!c.getSelectedName}" 
+                                             maxRowSelection="{!v.maxRowSelection}"
+                                             />
+                          
+                    </lightning:layoutItem>
+                    <lightning:layoutItem padding="around-small" flexibility="auto">
+                        <lightning:buttonGroup >
+                            <lightning:button label="Previous" disabled="{!v.startPage == 0}"  
+                                              onclick="{!c.previous}" variant="brand"
+                                              iconName='utility:back'/>
+                            &nbsp; &nbsp; &nbsp;
+                            <lightning:button label="Next" disabled="{!v.endPage >= v.totalRecords}" 
+                                              onclick="{!c.next}" variant="brand"
+                                              iconName='utility:forward' iconPosition='right'/>
+                        </lightning:buttonGroup>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:card>
+            
+    </div>
+    </aura:if>
+       
+    <!--</div>-->
+    <!-- You must define keyField as 'Id' to save the record back in Salesforce
+ 'onsave' attribute will executed when user clicks on save button -->
+    
+  
+
+</aura:component>

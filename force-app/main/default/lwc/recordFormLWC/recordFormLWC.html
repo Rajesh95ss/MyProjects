@@ -1,0 +1,36 @@
+<!--
+  @Component Name     : recordFormLWC.html
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 26/7/2019, 12:26:27 PM
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    26/7/2019, 11:19:18 AM   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<template>
+    <!-- <lightning-record-form
+        record-id={recordId}
+        object-api-name="Account"
+        layout-type="Full"
+        mode="readonly">
+    </lightning-record-form> -->
+
+    User Id : {userId}
+
+    <lightning-record-view-form record-id={recordId} object-api-name="Account">
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="Name"></lightning-output-field>
+                <lightning-output-field field-name="Phone"></lightning-output-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="Industry"></lightning-output-field>
+                <lightning-output-field field-name="AnnualRevenue"></lightning-output-field>
+            </div>
+        </div>
+    </lightning-record-view-form>
+</template>
