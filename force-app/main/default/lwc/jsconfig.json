@@ -3,20 +3,23 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
-            "c/selectedContact": [
-                "selectedContact/selectedContact.js"
-            ],
-            "c/sTreeStructureLWC": [
-                "sTreeStructureLWC/sTreeStructureLWC.js"
-            ],
             "c/dataTable": [
                 "dataTable/dataTable.js"
             ],
             "c/dynamic_Tree_Structure": [
                 "dynamic_Tree_Structure/dynamic_Tree_Structure.js"
             ],
+            "c/fileUpload": [
+                "fileUpload/fileUpload.js"
+            ],
             "c/recordFormLWC": [
                 "recordFormLWC/recordFormLWC.js"
+            ],
+            "c/sTreeStructureLWC": [
+                "sTreeStructureLWC/sTreeStructureLWC.js"
+            ],
+            "c/selectedContact": [
+                "selectedContact/selectedContact.js"
             ]
         }
     },

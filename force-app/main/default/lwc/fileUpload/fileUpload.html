@@ -1,0 +1,24 @@
+<!--
+  @Component Name     : fileUpload.html
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 2/8/2019, 12:20:45 PM
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    2/8/2019, 11:24:56 AM   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<template>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <lightning-file-upload label="Attach receipt" name="fileUploader" accept={acceptedFormats}
+                    record-id={recordId} onuploadfinished={handleUploadFinished} multiple>
+                </lightning-file-upload>
+            </header>
+        </div>
+    </article>
+</template>

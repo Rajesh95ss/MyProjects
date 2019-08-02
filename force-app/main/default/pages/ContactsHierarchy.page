@@ -1,0 +1,24 @@
+<!--
+  @Page Name          : ContactsHierarchy.page
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 2/8/2019, 12:45:07 PM
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    2/8/2019, 12:45:07 PM   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<apex:page>
+    <script>
+        $Lightning.use("c:ContactsTreeLWCApp", function () {
+            var data = saveData;
+            $Lightning.createComponent("c:sTreeStructureLWC",
+                {},
+                "LcDisplayId",
+                function (component) { });
+        });
+    </script>
+</apex:page>
