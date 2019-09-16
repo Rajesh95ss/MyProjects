@@ -1,0 +1,94 @@
+Batch:
+String query ='select Id,Name,Industry From Account limit 10';
+List<Account> aaclist = database.query(query);
+List<String> fieldLst = new List<String>();
+Integer i =0;
+for(String str :query.split(',') ){
+    if(i != 0) {
+        if(str.contains('From')) {
+           fieldLst.add(str.split('From')[0]);
+        }
+        else{
+          fieldLst.add(str);
+        }
+      }
+    i++;
+}
+
+public Map <String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
+Map <String, Schema.SObjectField> fieldMap = schemaMap.get('Account').getDescribe().fields.getMap();
+Map<Id,String> accountMap = new Map<Id,String> ();
+
+String strbody = '{"batchRequests" : [';
+
+for(Account thisAcc : aaclist ) {
+    strbody +='{"method" : "PATCH","url" : "v45.0/sobjects/account/'+thisAcc.Id+'","richInput" :{';
+    for(string str: fieldLst){
+        strbody +=     '\"'+str+'\"'+':'+ '\"'+(String)thisAcc.get(fieldMap.get(str.trim()))+'\",';
+       
+     }
+    strbody =strbody.removeEnd(',');
+    strbody += '}},';
+  }
+strbody =strbody.removeEnd(',');
+strbody = strbody+']}';
+system.debug(strbody);
+compositeApis.updater('/services/data/v45.0/composite/batch/account', strbody);
+
+Composite:
+List<String> accountstr = new List<String>{'aaa','bbb','ccc'};
+        system.debug(userinfo.getSessionId());
+        string newBody = '{"compositeRequest" :[';
+        integer i =0;
+        for(String str:accountstr) {
+            
+            newBody +=    '{"method" : "POST",'+
+                              '"url" : "/services/data/v38.0/sobjects/Account",'+
+                              '"referenceId" : "refAccount'+i+'",'+
+                               '"body" : { "Name" : "'+str+'" }'+
+                            '},{'+
+                             '"method" : "POST",'+
+                             '"url" : "/services/data/v38.0/sobjects/Contact",'+
+                             '"referenceId" : "refContact'+i+'",'+
+                           '"body" : {'+
+                           '"LastName" : "'+str+'",'+
+                           '"AccountId" : "@{refAccount.id}"'+
+                       ' }},';
+            i++;
+                } 
+         newBody = newBody.removeEnd(',');
+        newBody += ']}';
+system.debug(newBody);
+
+
+
+string body = '{'
++'"compositeRequest" : [{'
+  +'"method" : "POST",'
+  +'"url" : "/services/data/v42.0/sobjects/Account",'
+  +'"referenceId" : "refAccount",'
+  +'"body" : { "Name" : "Sample Account" }'
+  +'},{'
+  +'"method" : "POST",'
+  +'"url" : "/services/data/v42.0/sobjects/Contact",'
+  +'"referenceId" : "refContact",'
+  +'"body" : { '
+    +'"LastName" : "Sample Contact",'
+    +'"AccountId" : "@{refAccount.id}"'
+    +'}'
+  +'}]'
++'}'; 
+system.debug('body '+body);
+String endpoint = URL.getSalesforceBaseUrl().toExternalForm();
+    endpoint += '/services/data/v42.0/composite';
+    EncodingUtil.urlEncode(endpoint,'UTF-8');
+     system.debug('endpoint '+endpoint);
+    //HTTP Request send
+    HttpRequest req = new HttpRequest();
+    req.setHeader('Authorization', 'OAuth ' + UserInfo.getSessionId()); 
+	thisHttpRequest.setHeader('Content-Type', 'application/json');
+    req.setEndpoint(endpoint);
+    req.setMethod('POST');
+    req.setBody(body);
+    Http http = new Http();
+    HTTPResponse res = http.send(req);
